@@ -29,9 +29,13 @@
                     Statement stmt = null;
 
                     try {
-                        Class.forName("com.mysql.cj.jdbc.Driver");
-                        conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/tu_base_de_datos", "usuario", "contraseña");
+                    	Class.forName("org.sqlite.JDBC");
+                        
+                        String dbURL = "jdbc:sqlite:escandallo.db"; 
+                        conn = DriverManager.getConnection(dbURL);
+                        
                         stmt = conn.createStatement();
+                        
                         String sql = "SELECT * FROM escandallos";
                         ResultSet rs = stmt.executeQuery(sql);
 

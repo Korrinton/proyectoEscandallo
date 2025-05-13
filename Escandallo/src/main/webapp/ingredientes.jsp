@@ -41,13 +41,11 @@
         PreparedStatement pstmt = null;
 
         try {
-
-            // URL de conexión para SQLite
-            String url = "jdbc:sqlite:bases_de_datos/escandallo.db";
-
-            // Establecer la conexión
-            conn = DriverManager.getConnection(url);
-			
+        	Class.forName("org.sqlite.JDBC");
+                    
+            String dbURL = "jdbc:sqlite:escandallo.db"; 
+            conn = DriverManager.getConnection(dbURL);
+            
             String sql = "INSERT INTO ingredientes (nombre, unidad_medida, costo_por_unidad) VALUES (?, ?, ?)";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, nombre);

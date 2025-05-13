@@ -1,35 +1,57 @@
 package clases;
 
+import java.sql.*;
+import java.util.ArrayList;
+
+/**
+ * Clase que representa un ingrediente en un escandallo
+ */
 public class Ingrediente {
     private String nombre;
-    private String unidadMedida;
-    private double costoPorUnidad;
-
-    // Constructor
-    public Ingrediente(String nombre, String unidadMedida, double costoPorUnidad) {
-
-        this.nombre = nombre;
-        this.unidadMedida = unidadMedida;
-        this.costoPorUnidad = costoPorUnidad;
-    }
-
-    // Getters y Setters
+    private double cantidad;
+    private String unidad;
     
+
+    public Ingrediente() {
+        this.nombre = "";
+        this.cantidad = 0.0;
+        this.unidad = "";
+    }
+    
+
+    public Ingrediente(String nombre, double cantidad, String unidad) {
+        this.nombre = nombre;
+        this.cantidad = cantidad;
+        this.unidad = unidad;
+    }
+    
+    // Getters y setters
     public String getNombre() {
         return nombre;
     }
-
-    public String getUnidadMedida() {
-        return unidadMedida;
+    
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
-
-    public double getCostoPorUnidad() {
-        return costoPorUnidad;
+    
+    public double getCantidad() {
+        return cantidad;
     }
-
+    
+    public void setCantidad(double cantidad) {
+        this.cantidad = cantidad;
+    }
+    
+    public String getUnidad() {
+        return unidad;
+    }
+    
+    public void setUnidad(String unidad) {
+        this.unidad = unidad;
+    }
+    
     @Override
-	public String toString() {
-		return "Ingrediente [ nombre=" + nombre + ", unidadMedida=" + unidadMedida + ", costoPorUnidad="
-				+ costoPorUnidad + "]";
-	}
+    public String toString() {
+        return nombre + " - " + cantidad + " " + unidad;
+    }
 }

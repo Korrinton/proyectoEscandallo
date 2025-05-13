@@ -1,74 +1,267 @@
 package clases;
 
+import java.sql.*;
+import java.util.ArrayList;
 
-import java.util.List;
-
-
+/**
+ * Clase que representa un escandallo de un producto
+ */
 public class Escandallo {
-    private String NombreEscandallo;
-    private double costoTotal;
-    private List<Ingrediente> ingredientes; 
-    private int porciones;
-    private double costePorPorciones;
-
+    private int id;
+    private String nombre;
+    private double numeroPorciones;
+    private String imagenPath;
+    private ArrayList<Ingrediente> ingredientes;
     
-    public Escandallo(String producto, double costoTotal,int porciones, List<Ingrediente> ingredientes) {
-
-        this.NombreEscandallo = producto;
-        this.costoTotal = costoTotal;
-        this.ingredientes = ingredientes;
-        this.porciones=porciones;
-        calcularCoste();
+    /**
+     * Constructor por defecto
+     */
+    public Escandallo() {
+        this.id = 0;
+        this.nombre = "";
+        this.numeroPorciones = 0.0;
+        this.imagenPath = "";
+        this.ingredientes = new ArrayList<>();
     }
-
-    // Getters y Setters
-   
-    public String getProducto() {
-        return NombreEscandallo;
+    
+    /**
+     * Constructor con parámetros
+     * @param nombre Nombre del producto
+     * @param numeroPorciones Número de porciones
+     */
+    public Escandallo(String nombre, double numeroPorciones) {
+        this.id = 0;
+        this.nombre = nombre;
+        this.numeroPorciones = numeroPorciones;
+        this.imagenPath = "";
+        this.ingredientes = new ArrayList<>();
     }
-
-    public void setProducto(String producto) {
-        this.NombreEscandallo = producto;
+    
+    // Getters y setters
+    public int getId() {
+        return id;
     }
-
-    public double getCostoTotal() {
-        return costoTotal;
+    
+    public void setId(int id) {
+        this.id = id;
     }
-
-    public void setCostoTotal(double costoTotal) {
-        this.costoTotal = costoTotal;
+    
+    public String getNombre() {
+        return nombre;
     }
-
-    public List<Ingrediente> getIngredientes() {
+    
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+    
+    public double getNumeroPorciones() {
+        return numeroPorciones;
+    }
+    
+    public void setNumeroPorciones(double numeroPorciones) {
+        this.numeroPorciones = numeroPorciones;
+    }
+    
+    public String getImagenPath() {
+        return imagenPath;
+    }
+    
+    public void setImagenPath(String imagenPath) {
+        this.imagenPath = imagenPath;
+    }
+    
+    public ArrayList<Ingrediente> getIngredientes() {
         return ingredientes;
     }
-
-    public void setIngredientes(List<Ingrediente> ingredientes) {
+    
+    public void setIngredientes(ArrayList<Ingrediente> ingredientes) {
         this.ingredientes = ingredientes;
     }
     
-    public double getCostePorPorciones() {
-		return costePorPorciones;
-	}
-
-	public void setCostePorPorciones(double costePorPorciones) {
-		this.costePorPorciones = costePorPorciones;
-	}
-
-	//método para calcular el coste
-    public void calcularCoste() {
-    	double calculoTotal=0;
-    	for(Ingrediente ingrediente:ingredientes) {
-    		calculoTotal+=ingrediente.getCostoPorUnidad();
-    	}
-    	this.costePorPorciones=calculoTotal/this.porciones;
-    	 
+    /**
+     * Añade un ingrediente al escandallo
+     * @param ingrediente Ingrediente a añadir
+     */
+    public void addIngrediente(Ingrediente ingrediente) {
+        this.ingredientes.add(ingrediente);
     }
-
-	@Override
-	public String toString() {
-		return "Escandallo [NombreEscandallo=" + NombreEscandallo + ", costoTotal=" + costoTotal + ", ingredientes="
-				+ ingredientes + ", porciones=" + porciones + ", costePorPorciones=" + costePorPorciones + "]";
-	}
     
+    /**
+     * Elimina un ingrediente del escandallo
+     * @param index Índice del ingrediente a eliminar
+     */
+    public void removeIngrediente(int index) {
+        if (index >= 0 && index < this.ingredientes.size()) {
+            this.ingredientes.remove(index);
+        }
+    }
+    
+    /**
+     * Guarda el escandallo en la base de datos
+     * @return true si se guardó correctamente, false en caso contrario
+     */
+    public boolean guardar() {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        boolean resultado = false;
+        
+        try {
+            Class.forName("org.sqlite.JDBC");
+            String dbURL = "jdbc:sqlite:escandallo.db";
+            conn = DriverManager.getConnection(dbURL);
+            conn.setAutoCommit(false);
+            
+            // Insertar en tabla escandallos
+            String sql = "INSERT INTO escandallos (nombre, numero_porciones, imagen_path) VALUES (?, ?, ?)";
+            pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            pstmt.setString(1, this.nombre);
+            pstmt.setDouble(2, this.numeroPorciones);
+            pstmt.setString(3, this.imagenPath);
+            pstmt.executeUpdate();
+            
+            // Obtener el ID generado
+            rs = pstmt.getGeneratedKeys();
+            if (rs.next()) {
+                this.id = rs.getInt(1);
+            } else {
+                throw new SQLException("No se pudo obtener el ID del escandallo");
+            }
+            
+            // Insertar ingredientes
+            sql = "INSERT INTO escandallo_ingredientes (escandallo_id, ingrediente_nombre, cantidad, unidad) VALUES (?, ?, ?, ?)";
+            pstmt = conn.prepareStatement(sql);
+            
+            for (Ingrediente ingrediente : this.ingredientes) {
+                pstmt.setInt(1, this.id);
+                pstmt.setString(2, ingrediente.getNombre());
+                pstmt.setDouble(3, ingrediente.getCantidad());
+                pstmt.setString(4, ingrediente.getUnidad());
+                pstmt.executeUpdate();
+            }
+            
+            conn.commit();
+            resultado = true;
+        } catch (Exception e) {
+            try {
+                if (conn != null) {
+                    conn.rollback();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (pstmt != null) pstmt.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        
+        return resultado;
+    }
+    
+
+    public static Escandallo cargar(int id) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        Escandallo escandallo = null;
+        
+        try {
+            Class.forName("org.sqlite.JDBC");
+            String dbURL = "jdbc:sqlite:escandallo.db";
+            conn = DriverManager.getConnection(dbURL);
+            
+            // Cargar datos del escandallo
+            String sql = "SELECT * FROM escandallos WHERE id = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, id);
+            rs = pstmt.executeQuery();
+            
+            if (rs.next()) {
+                escandallo = new Escandallo();
+                escandallo.setId(rs.getInt("id"));
+                escandallo.setNombre(rs.getString("nombre"));
+                escandallo.setNumeroPorciones(rs.getDouble("numero_porciones"));
+                escandallo.setImagenPath(rs.getString("imagen_path"));
+                
+                // Cargar ingredientes
+                pstmt.close();
+                rs.close();
+                
+                sql = "SELECT * FROM escandallo_ingredientes WHERE escandallo_id = ?";
+                pstmt = conn.prepareStatement(sql);
+                pstmt.setInt(1, id);
+                rs = pstmt.executeQuery();
+                
+                while (rs.next()) {
+                    Ingrediente ingrediente = new Ingrediente();
+                    ingrediente.setNombre(rs.getString("ingrediente_nombre"));
+                    ingrediente.setCantidad(rs.getDouble("cantidad"));
+                    ingrediente.setUnidad(rs.getString("unidad"));
+                    escandallo.addIngrediente(ingrediente);
+                }
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (pstmt != null) pstmt.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        
+        return escandallo;
+    }
+    
+    /**
+     * Obtiene todos los escandallos de la base de datos
+     * @return ArrayList con todos los escandallos
+     */
+    public static ArrayList<Escandallo> obtenerTodos() {
+        Connection conn = null;
+        Statement stmt = null;
+        ResultSet rs = null;
+        ArrayList<Escandallo> escandallos = new ArrayList<>();
+        
+        try {
+            Class.forName("org.sqlite.JDBC");
+            String dbURL = "jdbc:sqlite:escandallo.db";
+            conn = DriverManager.getConnection(dbURL);
+            
+            // Obtener todos los escandallos
+            String sql = "SELECT * FROM escandallos";
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery(sql);
+            
+            while (rs.next()) {
+                Escandallo escandallo = new Escandallo();
+                escandallo.setId(rs.getInt("id"));
+                escandallo.setNombre(rs.getString("nombre"));
+                escandallo.setNumeroPorciones(rs.getDouble("numero_porciones"));
+                escandallo.setImagenPath(rs.getString("imagen_path"));
+                escandallos.add(escandallo);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        
+        return escandallos;
+    }
 }
