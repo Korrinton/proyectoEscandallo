@@ -11,6 +11,8 @@ if ("POST".equalsIgnoreCase(request.getMethod())) {
     String[] ingredientesNombres = request.getParameterValues("ingredienteNombre");
     String[] ingredientesCantidades = request.getParameterValues("ingredienteCantidad");
     String[] ingredientesUnidades = request.getParameterValues("ingredienteUnidad");
+    String[] ingredientesPrecio =request.getParameterValues("ingredientesPrecio");
+    
     
     if (nombreProducto != null && numPorcionesStr != null && 
         ingredientesNombres != null && ingredientesCantidades != null && ingredientesUnidades != null) {
@@ -29,8 +31,10 @@ if ("POST".equalsIgnoreCase(request.getMethod())) {
                     String nombre = ingredientesNombres[i];
                     double cantidad = Double.parseDouble(ingredientesCantidades[i]);
                     String unidad = ingredientesUnidades[i];
+                    double precio = Double.parseDouble(ingredientesPrecio[i]);
                     
-                    Ingrediente ingrediente = new Ingrediente(nombre, cantidad, unidad);
+                    Ingrediente ingrediente = new Ingrediente(nombre, cantidad, unidad,precio);
+                    
                     nuevoEscandallo.addIngrediente(ingrediente);
                 }
             }

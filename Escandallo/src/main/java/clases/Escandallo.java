@@ -12,6 +12,7 @@ public class Escandallo {
     private double numeroPorciones;
     private String imagenPath;
     private ArrayList<Ingrediente> ingredientes;
+    private Double costeTotal;
     
     /**
      * Constructor por defecto
@@ -76,30 +77,32 @@ public class Escandallo {
     
     public void setIngredientes(ArrayList<Ingrediente> ingredientes) {
         this.ingredientes = ingredientes;
+        setCosteTotal();
     }
     
-    /**
-     * Añade un ingrediente al escandallo
-     * @param ingrediente Ingrediente a añadir
-     */
+  
     public void addIngrediente(Ingrediente ingrediente) {
         this.ingredientes.add(ingrediente);
+        setCosteTotal();
     }
-    
-    /**
-     * Elimina un ingrediente del escandallo
-     * @param index Índice del ingrediente a eliminar
-     */
+    //cada vez que se modifique el
+    public void setCosteTotal() {
+    	Double costeTotal=0.0; 
+        for(Ingrediente ingrediente:this.ingredientes) {
+        	
+        	costeTotal+=ingrediente.getCantidad()*ingrediente.getPrecio();
+        }
+        this.costeTotal=costeTotal+(costeTotal*.21)/this.numeroPorciones;     
+    }
+
     public void removeIngrediente(int index) {
         if (index >= 0 && index < this.ingredientes.size()) {
             this.ingredientes.remove(index);
         }
+        setCosteTotal();
     }
     
-    /**
-     * Guarda el escandallo en la base de datos
-     * @return true si se guardó correctamente, false en caso contrario
-     */
+    //guardar el escandallo en la base de datos
     public boolean guardar() {
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -129,14 +132,14 @@ public class Escandallo {
             }
             
             // Insertar ingredientes
-            sql = "INSERT INTO escandallo_ingredientes (escandallo_id, ingrediente_nombre, cantidad, unidad) VALUES (?, ?, ?, ?)";
+            sql = "INSERT INTO escandallo_ingredientes (ingrediente_nombre, cantidad, unidad,precio) VALUES (?, ?, ?, ?)";
             pstmt = conn.prepareStatement(sql);
             
             for (Ingrediente ingrediente : this.ingredientes) {
-                pstmt.setInt(1, this.id);
-                pstmt.setString(2, ingrediente.getNombre());
-                pstmt.setDouble(3, ingrediente.getCantidad());
-                pstmt.setString(4, ingrediente.getUnidad());
+                pstmt.setString(1, ingrediente.getNombre());
+                pstmt.setDouble(2, ingrediente.getCantidad());
+                pstmt.setString(3, ingrediente.getUnidad());
+                pstmt.setDouble(4, ingrediente.getPrecio());
                 pstmt.executeUpdate();
             }
             
@@ -164,7 +167,7 @@ public class Escandallo {
         return resultado;
     }
     
-
+    //mostrar el escandallo
     public static Escandallo cargar(int id) {
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -177,14 +180,13 @@ public class Escandallo {
             conn = DriverManager.getConnection(dbURL);
             
             // Cargar datos del escandallo
-            String sql = "SELECT * FROM escandallos WHERE id = ?";
+            String sql = "SELECT * FROM escandallos";
             pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, id);
+            
             rs = pstmt.executeQuery();
             
             if (rs.next()) {
                 escandallo = new Escandallo();
-                escandallo.setId(rs.getInt("id"));
                 escandallo.setNombre(rs.getString("nombre"));
                 escandallo.setNumeroPorciones(rs.getDouble("numero_porciones"));
                 escandallo.setImagenPath(rs.getString("imagen_path"));
@@ -193,9 +195,9 @@ public class Escandallo {
                 pstmt.close();
                 rs.close();
                 
-                sql = "SELECT * FROM escandallo_ingredientes WHERE escandallo_id = ?";
+                sql = "SELECT * FROM escandallo_ingredientes WHERE nombre = ?";
                 pstmt = conn.prepareStatement(sql);
-                pstmt.setInt(1, id);
+               
                 rs = pstmt.executeQuery();
                 
                 while (rs.next()) {
@@ -222,10 +224,7 @@ public class Escandallo {
         return escandallo;
     }
     
-    /**
-     * Obtiene todos los escandallos de la base de datos
-     * @return ArrayList con todos los escandallos
-     */
+    //para ver todos los escandallos
     public static ArrayList<Escandallo> obtenerTodos() {
         Connection conn = null;
         Statement stmt = null;

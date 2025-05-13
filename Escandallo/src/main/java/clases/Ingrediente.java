@@ -10,7 +10,7 @@ public class Ingrediente {
     private String nombre;
     private double cantidad;
     private String unidad;
-    
+    private Double precio;
 
     public Ingrediente() {
         this.nombre = "";
@@ -19,13 +19,24 @@ public class Ingrediente {
     }
     
 
-    public Ingrediente(String nombre, double cantidad, String unidad) {
+    public Ingrediente(String nombre, double cantidad, String unidad, Double precio) {
         this.nombre = nombre;
         this.cantidad = cantidad;
         this.unidad = unidad;
+        this.precio=precio;
     }
     
-    // Getters y setters
+    public Double getPrecio() {
+		return precio;
+	}
+
+
+	public void setPrecio(Double precio) {
+		this.precio = precio;
+	}
+
+
+	// Getters y setters
     public String getNombre() {
         return nombre;
     }
