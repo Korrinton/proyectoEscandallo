@@ -15,7 +15,6 @@
 
     <div class="container">
         <h2>Gestión de Escandallos</h2>
-
        
         <div class="añadirEscandallo">
             <h3>Añadir Nuevo Escandallo</h3>
@@ -29,10 +28,10 @@
 				<br>
                 <label for="ingredientes">Seleccionar Ingredientes:</label>
                 <select id="ingredientes" name="ingredientes" multiple>
-                <br>
+                
                 
                 <label for="imagen">Selecciona una imagen:</label>            
-				<input type="file" id="imagen" name="imagen" accept="image/*" optional>
+				<input type="file" id="imagen" name="imagen" accept="image/*">
                     <%
                         Connection conn = null;
                         Statement stmt = null;
@@ -60,7 +59,9 @@
                 </select>
 				<br>
                 <button type="submit">Guardar Escandallo</button>
+              
             </form>
+              </div>
         </div>
 
 

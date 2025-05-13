@@ -13,44 +13,47 @@ header {
     padding: 1em 0;
     text-align: center;
 }
-/*cabeceras*/
-.links{
-    text-align: center; 
-}
-list {
-    background-color: #444;
-    color: #fff;
-    padding: 0.5em 0;
+
+/* Contenedor para centrar la lista de enlaces */
+.links {
     text-align: center;
+    margin-top: 20px; /* Añade un poco de espacio desde la cabecera */
 }
 
-list a {
+.links ul {
+    list-style-type: none; /* Quitar las viñetas */
+    padding: 0;
+    margin: 0;
+    display: inline-block; /* Para que el ul no ocupe todo el ancho */
+}
+
+.links ul li {
+    display: inline; /* Para que los elementos li se muestren en línea */
+    margin-right: 10px; /* Espacio entre los elementos de la lista */
+}
+
+.links ul li:last-child {
+    margin-right: 0; /* Quitar el margen del último elemento */
+}
+
+.links ul li a {
+    background-color: #444;
     color: #fff;
     text-decoration: none;
     padding: 0.5em 1em;
-    display: inline-block;
+    display: inline-block; /* Para que el padding y background se apliquen como un "cuadro" */
+    border-radius: 5px; /* Opcional: para bordes redondeados */
 }
 
-list a:hover {
+.links ul li a:hover {
     background-color: #555;
 }
-
 .container {
     width: 80%;
     margin: 20px auto;
     padding: 20px;
     background-color: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-footer {
-    background-color: #333;
-    color: #fff;
-    text-align: center;
-    padding: 1em 0;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
 }
 
 
