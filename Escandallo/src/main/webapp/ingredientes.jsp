@@ -42,10 +42,13 @@
 
         try {
         	Class.forName("org.sqlite.JDBC");
-                    
+              
+        	//indicación para ver donde está buscando la base de datos
         	String dbPath = application.getRealPath("/bases_de_datos/escandallo.db");
+        	//out.println("<p>Ruta de la base de datos: " + dbPath + "</p>");
         	String dbURL = "jdbc:sqlite:" + dbPath;
-            conn = DriverManager.getConnection(dbURL);
+        	//out.println("<p>URL de conexión: " + dbURL + "</p>");
+        	conn = DriverManager.getConnection(dbURL);
             
             String sql = "INSERT INTO ingredientes (nombre, unidad_medida, costo_por_unidad) VALUES (?, ?, ?)";
             pstmt = conn.prepareStatement(sql);

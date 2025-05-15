@@ -2,25 +2,24 @@ package clases;
 
 import java.sql.*;
 import java.util.ArrayList;
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 
 /**
  * Clase que representa un escandallo de un producto
  */
+
 public class Escandallo {
-    private int id;
     private String nombre;
     private double numeroPorciones;
     private String imagenPath;
     private ArrayList<Ingrediente> ingredientes;
     private Double costeTotal;
     private ServletContext servletContext;
-
+    
     /**
      * Constructor por defecto
      */
     public Escandallo() {
-        this.id = 0;
         this.nombre = "";
         this.numeroPorciones = 0.0;
         this.imagenPath = "";
@@ -33,7 +32,6 @@ public class Escandallo {
      * @param numeroPorciones Número de porciones
      */
     public Escandallo(String nombre, double numeroPorciones) {
-        this.id = 0;
         this.nombre = nombre;
         this.numeroPorciones = numeroPorciones;
         this.imagenPath = "";
@@ -41,14 +39,6 @@ public class Escandallo {
     }
 
     // Getters y setters
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getNombre() {
         return nombre;
@@ -114,14 +104,15 @@ public class Escandallo {
     }
 
     private String getDatabasePath() {
+        String dbPath = "";
         if (servletContext != null) {
-            return servletContext.getRealPath("/bases_de_datos/escandallo.db");
+            dbPath = servletContext.getRealPath("/bases_de_datos/escandallo.db");
         } else {
-            // Manejar el caso donde servletContext es null (ej. ejecución fuera del contexto web)
-            return "ruta/por/defecto/escandallo.db"; // ¡Debes definir una estrategia aquí si usas la clase fuera del contexto web!
+            dbPath = "C:\\Users\\ramon\\git\\proyectoEscandallo\\Escandallo\\src\\main\\webapp\\bases_de_datos\\escandallo.db";
         }
+        System.out.println("Ruta de la base de datos: " + dbPath);
+        return dbPath;
     }
-
     //guardar el escandallo en la base de datos
     public boolean guardar() {
         Connection conn = null;
@@ -133,7 +124,8 @@ public class Escandallo {
             Class.forName("org.sqlite.JDBC");
             String dbPath = getDatabasePath();
             String dbURL = "jdbc:sqlite:" + dbPath;
-
+            
+            
             conn = DriverManager.getConnection(dbURL);
             conn.setAutoCommit(false);
 
@@ -146,15 +138,7 @@ public class Escandallo {
             pstmt.setDouble(4, this.costeTotal / this.numeroPorciones);
             pstmt.setString(5, this.imagenPath);
             pstmt.executeUpdate();
-
-            // Obtener el ID generado
-            rs = pstmt.getGeneratedKeys();
-            if (rs.next()) {
-                this.id = rs.getInt(1);
-            } else {
-                throw new SQLException("No se pudo obtener el ID del escandallo");
-            }
-
+            
             // Insertar ingredientes
             sql = "INSERT INTO escandallo_ingredientes (nombre_escandallo, nombre_ingrediente, cantidad, unidad_medida, precio) VALUES (?, ?, ?, ?, ?)";
             pstmt = conn.prepareStatement(sql);
@@ -206,7 +190,7 @@ public class Escandallo {
             conn = DriverManager.getConnection(dbURL);
 
             // Cargar datos del escandallo
-            String sql = "SELECT id_escandallo, nombre_escandallo, numero_porciones, costo_total, imagen_path FROM escandallos WHERE nombre_escandallo = ?";
+            String sql = "SELECT nombre_escandallo, numero_porciones, costo_total, imagen_path FROM escandallo WHERE nombre_escandallo = ?";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, nombreEscandallo);
 
@@ -214,7 +198,6 @@ public class Escandallo {
 
             if (rs.next()) {
                 escandallo = new Escandallo(rs.getString("nombre_escandallo"), rs.getDouble("numero_porciones"));
-                escandallo.setId(rs.getInt("id_escandallo"));
                 escandallo.setImagenPath(rs.getString("imagen_path"));
                 escandallo.costeTotal = rs.getDouble("costo_total");
 
@@ -269,13 +252,12 @@ public class Escandallo {
             conn = DriverManager.getConnection(dbURL);
 
             // Obtener todos los escandallos
-            String sql = "SELECT id_escandallo, nombre_escandallo, numero_porciones, imagen_path FROM escandallos";
+            String sql = "SELECT id_escandallo, nombre_escandallo, numero_porciones, imagen_path FROM escandallo";
             stmt = conn.createStatement();
             rs = stmt.executeQuery(sql);
 
             while (rs.next()) {
                 Escandallo escandallo = new Escandallo();
-                escandallo.setId(rs.getInt("id_escandallo"));
                 escandallo.setNombre(rs.getString("nombre_escandallo"));
                 escandallo.setNumeroPorciones(rs.getDouble("numero_porciones"));
                 escandallo.setImagenPath(rs.getString("imagen_path"));

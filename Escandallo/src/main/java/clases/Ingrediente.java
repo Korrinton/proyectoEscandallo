@@ -1,7 +1,7 @@
 package clases;
 
-import java.sql.*;
-import java.util.ArrayList;
+//import java.sql.*;
+//import java.util.ArrayList;
 
 /**
  * Clase que representa un ingrediente en un escandallo
