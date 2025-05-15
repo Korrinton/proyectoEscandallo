@@ -190,7 +190,7 @@ public class Escandallo {
             conn = DriverManager.getConnection(dbURL);
 
             // Cargar datos del escandallo
-            String sql = "SELECT nombre_escandallo, numero_porciones, costo_total, imagen_path FROM escandallo WHERE nombre_escandallo = ?";
+            String sql = "SELECT nombre_escandallo, numero_porciones, costo_total, imagen_path FROM escandallos WHERE nombre_escandallo = ?";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, nombreEscandallo);
 
@@ -252,7 +252,7 @@ public class Escandallo {
             conn = DriverManager.getConnection(dbURL);
 
             // Obtener todos los escandallos
-            String sql = "SELECT id_escandallo, nombre_escandallo, numero_porciones, imagen_path FROM escandallo";
+            String sql = "SELECT  nombre_escandallo, numero_porciones, imagen_path FROM escandallos";
             stmt = conn.createStatement();
             rs = stmt.executeQuery(sql);
 
