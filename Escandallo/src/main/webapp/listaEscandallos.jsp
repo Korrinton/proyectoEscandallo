@@ -40,13 +40,13 @@
                                     <td><%= escandallo.getNumeroPorciones() %></td>
                                     <td>
                                         <% if (escandallo.getImagenPath() != null && !escandallo.getImagenPath().isEmpty()) { %>
-                                            <img src="<%= request.getContextPath() + escandallo.getImagenPath() %>" alt="Imagen de <%= escandallo.getNombre() %>" width="50">
+                                            <img src="<%= request.getContextPath() + escandallo.getImagenPath() %>" alt="Imagen de <%= escandallo.getNombre() %>" width="200">
                                         <% } else { %>
                                             Sin imagen
                                         <% } %>
                                     </td>
                                     <td>
-                                        <a href="#">Ver Detalles</a>
+                                        
                                         </td>
                                 </tr>
                         <%

@@ -108,7 +108,7 @@ public class Escandallo {
         if (servletContext != null) {
             dbPath = servletContext.getRealPath("/bases_de_datos/escandallo.db");
         } else {
-            dbPath = "C:\\Users\\ramon\\git\\proyectoEscandallo\\Escandallo\\src\\main\\webapp\\bases_de_datos\\escandallo.db";
+            dbPath = "escandallo.db";
         }
         System.out.println("Ruta de la base de datos: " + dbPath);
         return dbPath;
@@ -208,6 +208,7 @@ public class Escandallo {
                 sql = "SELECT ei.nombre_ingrediente, ei.cantidad, ei.unidad_medida, ei.precio " +
                       "FROM escandallo_ingredientes ei " +
                       "WHERE ei.nombre_escandallo = ?";
+                
                 pstmt = conn.prepareStatement(sql);
                 pstmt.setString(1, escandallo.getNombre());
                 rs = pstmt.executeQuery();
