@@ -72,7 +72,7 @@ public class Escandallo {
         this.ingredientes = ingredientes;
         setCosteTotal();
     }
-
+    
 
     public void addIngrediente(Ingrediente ingrediente) {
         this.ingredientes.add(ingrediente);
@@ -151,7 +151,7 @@ public class Escandallo {
                 pstmt.setDouble(5, ingrediente.getPrecio());
                 pstmt.executeUpdate();
             }
-
+            
             conn.commit();
             resultado = true;
         } catch (Exception e) {
@@ -252,17 +252,18 @@ public class Escandallo {
             String dbURL = "jdbc:sqlite:" + dbPath;
             conn = DriverManager.getConnection(dbURL);
 
-            // Obtener todos los escandallos
-            String sql = "SELECT  nombre_escandallo, numero_porciones, imagen_path FROM escandallos";
+            // Obtener todos los nombres de los escandallos
+            String sql = "SELECT nombre_escandallo FROM escandallos";
             stmt = conn.createStatement();
             rs = stmt.executeQuery(sql);
 
             while (rs.next()) {
-                Escandallo escandallo = new Escandallo();
-                escandallo.setNombre(rs.getString("nombre_escandallo"));
-                escandallo.setNumeroPorciones(rs.getDouble("numero_porciones"));
-                escandallo.setImagenPath(rs.getString("imagen_path"));
-                escandallos.add(escandallo);
+                String nombreEscandallo = rs.getString("nombre_escandallo");
+                // Cargar la información completa del escandallo, incluyendo los ingredientes
+                Escandallo escandallo = cargar(nombreEscandallo, servletContext);
+                if (escandallo != null) {
+                    escandallos.add(escandallo);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
