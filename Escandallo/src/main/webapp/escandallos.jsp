@@ -100,7 +100,8 @@ if ("POST".equalsIgnoreCase(request.getMethod())) {
                                     try {
                                         Class.forName("org.sqlite.JDBC");
 
-                                        String dbURL = "jdbc:sqlite:escandallo.db";
+                                        String dbPath = application.getRealPath("/bases_de_datos/escandallo.db");
+                                    	String dbURL = "jdbc:sqlite:" + dbPath;
                                         conn = DriverManager.getConnection(dbURL);
 
                                         stmt = conn.createStatement();
