@@ -11,31 +11,38 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet" href="css/ingredientes.css">
+<link rel="stylesheet" href="css/login.css">
 <title>Registro de usuario</title>
 </head>
 <body>
 
-	<div class="container">
+	<div class="caja">
 		<h2>Gestión de Usuarios</h2>
 
 		<div class="añadirEscandallo">
 			<h3>Añadir Nuevo Usuario</h3>
-			<form id="registrarUsuarioFormulario" method="post"
-				action="registroUsuario.jsp">
-				<label for="usuario">Usuario:</label> <input type="text"
-					id="usuario" name="usuario" required> <br> <label
-					for="contrasena">Contraseña:</label> <input type="password"
-					id="contrasena" name="contrasena" required> <br> <label
-					for="nombre">Nombre:</label> <input type="text" id="nombre"
-					name="nombre" required> <br> <label for="apellidos">Apellidos:</label>
+			<form id="registrarUsuarioFormulario" method="post" action="registroUsuario.jsp">
+				<label for="usuario">Usuario:</label> 
+				<input type="text"id="usuario" name="usuario" required>
+				<br> 
+				<label for="contrasena">Contraseña:</label> 
+				<input type="password" id="contrasena" name="contrasena" required>
+				<br>
+				<label for="nombre">Nombre:</label>
+				<input type="text" id="nombre" name="nombre" required>
+				<br> 
+				<label for="apellidos">Apellidos:</label>
 				<input type="text" id="apellidos" name="apellidos" required>
-
 				<br>
 				<button type="submit">Guardar Usuario</button>
-
-			</form>
+				
+			</form>		
 		</div>
+		<div class="options">
+			<a href="index.jsp">Volver a login</a>
+			<br>
+		</div>
+		
 	</div>
 
 	<%!public String cifrarSHA256(String contrasena) {
@@ -115,7 +122,7 @@
 	}
 	%>
 
-
+<jsp:include page="pie.jsp" flush="false" />
 
 </body>
 </html>

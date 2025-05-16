@@ -12,8 +12,25 @@
 
     <jsp:include page="cabecera.jsp" flush="true" />
 
-	 <div class="contenedor">
-        <h2>Bienvenido</h2>
+        <video autoplay loop muted playsinline style="position: fixed; top: 0; left: 0; min-width: 100%; min-height: 100%; z-index: -1;">
+  			<source src="img/loginCocina.mp4" type="video/mp4">
+  			<source src="img/loginCocina.mp4" type="video/webm">
+  			 Tu navegador no soporta la reproducción de video.
+			</video>
+	<div class="caja">
+	<%
+    String nombreUsuario = null;
+
+    // Verificar si la sesión existe y si el atributo "usuario" está presente.
+    if (session != null && session.getAttribute("usuario") != null) {
+        // Obtener el valor del atributo "usuario" (asumiendo que así lo guardaste).
+        nombreUsuario = (String) session.getAttribute("usuario");
+    }
+%>        
+        <% if (nombreUsuario != null) { %>
+           <h2>Bienvenido <%= nombreUsuario %></h2>
+        <% } %>
+        
         <p>Esta aplicación te permite gestionar los ingredientes, recetas y costos de tus productos finales.</p>
         <p>Utiliza los enlaces de navegación para acceder a las diferentes secciones.</p>
     </div>

@@ -1,7 +1,6 @@
 @charset "UTF-8";
 body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-image: url('img/tt.jpg'); /* Reemplaza con tu imagen de fondo */
             background-size: cover;
             background-position: center;
             display: flex;
@@ -34,6 +33,7 @@ body {
             margin-bottom: 25px;
             font-size: 2.2em;
             font-weight: bold;
+            
         }
 
         .form-group {
@@ -87,6 +87,7 @@ body {
             margin-top: 25px;
             font-size: 0.9em;
             color: #777;
+            padding-bottom: 100px;
         }
 
         .options a {
