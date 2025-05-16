@@ -7,6 +7,16 @@ body {
     color: #333;
 }
 
+ .container {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            width: 350px;
+            text-align: center;
+        }
+        
+      
 header {
     background-color: #333;
     color: #fff;
@@ -41,13 +51,47 @@ list a:hover {
     padding: 20px;
     background-color: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    
+    
+}
+.caja h2 {
+  text-align: center;
 }
 
+.caja .inputs-container { /* Estilo para el contenedor de los inputs y labels */
+  display: flex;
+  justify-content: space-between; /* Distribuye los elementos con espacio entre ellos */
+  align-items: center; /* Opcional: alinea verticalmente si es necesario */
+  margin-bottom: 10px; /* Añade un poco de espacio debajo del grupo de inputs */
+}
 
+.caja h2 {
+  text-align: center;
+}
+
+.caja .inputs-grid-container {
+  display: grid;
+  grid-template-columns: auto 1fr auto 1fr auto 1fr; /* Define las columnas para label e input */
+  column-gap: 20px; /* Espacio entre columnas */
+  row-gap: 10px; /* Espacio entre filas si tienes múltiples filas de inputs */
+  margin-bottom: 10px;
+}
+
+.caja label {
+  text-align: right; /* Alinea las etiquetas a la derecha */
+}
+
+.caja input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  width: 100%; /* Los inputs ocupan el espacio de su celda */
+}
 @media (max-width: 600px) {
     .contenedor {
         width: 95%;
         padding: 10px;
+        
     }
 
     nav a {
