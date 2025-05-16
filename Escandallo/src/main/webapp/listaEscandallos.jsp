@@ -1,64 +1,80 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.sql.*" %>
-<%@ page import="clases.*" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="clases.*" %>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="css/escandallos.css">
-    <title>Lista de Escandallos</title>
-</head>
+<meta charset="UTF-8">
+<title>Lista de Escandallos</title>
+<link rel="stylesheet" href="css/estilos_listar.css"> </head>
 <body>
 
-    <jsp:include page="cabecera.jsp" flush="true" />
+<jsp:include page="cabecera.jsp" flush="true" />
 
-    <div class="container">
-        <h2>Lista de Escandallos</h2>
-        <table id="escandallosTable">
-            <thead>
-                <tr>
-                    <th>Producto</th>
-                    <th>Costo Total</th>
-                    <th>Ingredientes</th>
-                </tr>
-            </thead>
-            <tbody>
-                <%
-                    Connection conn = null;
-                    Statement stmt = null;
+<div class="container">
+    <h2>Lista de Escandallos</h2>
 
-                    try {
-                        Class.forName("com.mysql.cj.jdbc.Driver");
-                        conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/tu_base_de_datos", "usuario", "contraseña");
-                        stmt = conn.createStatement();
-                        String sql = "SELECT * FROM escandallos";
-                        ResultSet rs = stmt.executeQuery(sql);
+    <%
+        // Obtener la lista de todos los escandallos desde la base de datos (ahora con ingredientes cargados)
+        ArrayList<Escandallo> listaDeEscandallos = Escandallo.obtenerTodos(application);
 
-                        while (rs.next()) {
-                            String producto = rs.getString("producto");
-                            double costoTotal = rs.getDouble("costo_total");
-                            String ingredientesStr = rs.getString("ingredientes"); // Nombres de los ingredientes
-
-                            out.println("<tr>");
-                            out.println("<td>" + producto + "</td>");
-                            out.println("<td>" + costoTotal + "</td>");
-                            out.println("<td>" + ingredientesStr + "</td>");
-                            out.println("</tr>");
+        // Verificar si hay escandallos para mostrar
+        if (listaDeEscandallos != null && !listaDeEscandallos.isEmpty()) {
+    %>
+            <table class="tabla-escandallos">
+                <thead>
+                    <tr>
+                        <th>Nombre del Producto</th>
+                        <th>Número de Porciones</th>
+                        <th>Imagen</th>
+                        <th>Acciones</th> </tr>
+                </thead>
+                <tbody>
+                    <%
+                        // Iterar sobre la lista de escandallos y mostrar cada uno en una fila de la tabla
+                        for (Escandallo escandallo : listaDeEscandallos) {
+                    %>
+                            <tr>
+                                <td><%= escandallo.getNombre() %></td>
+                                <td><%= escandallo.getNumeroPorciones() %></td>
+                                <td>
+                                    <% if (escandallo.getImagenPath() != null && !escandallo.getImagenPath().isEmpty()) { %>
+                                        <img src="<%= request.getContextPath() + escandallo.getImagenPath() %>" alt="Imagen de <%= escandallo.getNombre() %>" width="200">
+                                    <% } else { %>
+                                        Sin imagen
+                                    <% } %>
+                                </td>
+                                <td>
+                                    <%
+                                    if (escandallo.getIngredientes() != null && !escandallo.getIngredientes().isEmpty()) {
+                                        out.println("<h5>Ingredientes:</h5>");
+                                        out.println("<ul>"); // Empezamos una lista no ordenada para los ingredientes
+                                        for(Ingrediente ingrediente : escandallo.getIngredientes()){
+                                            out.println("<li>" + ingrediente.getNombre() + " - " + ingrediente.getCantidad() + " " + ingrediente.getUnidad() + "</li>");
+                                        }
+                                        out.println("</ul>"); // Cerramos la lista de ingredientes
+                                    } else {
+                                        out.println("Sin ingredientes");
+                                    }
+                                    %>
+                                </td>
+                            </tr>
+                    <%
                         }
-                        rs.close();
-                    } catch (Exception e) {
-                        out.println("<p>Error: " + e.getMessage() + "</p>");
-                    } finally {
-                        if (stmt != null) try { stmt.close(); } catch (SQLException ignore) {}
-                        if (conn != null) try { conn.close(); } catch (SQLException ignore) {}
-                    }
-                %>
-            </tbody>
-        </table>
-    </div>
+                    %>
+                </tbody>
+            </table>
+    <%
+        } else {
+    %>
+            <p>No se han encontrado escandallos.</p>
+    <%
+        }
+    %>
 
-    <jsp:include page="pie.jsp" flush="true" />
+</div>
 
+<jsp:include page="pie.jsp" flush="true" />
 </body>
 </html>

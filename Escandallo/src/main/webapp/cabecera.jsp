@@ -8,8 +8,8 @@
     <div class="links">
         <ul>
             <li><a href="ingredientes.jsp">Ingredientes</a></li>
-    		<li><a href="listaEscandallos">Escandallos</a></li>
+    		<li><a href="listaEscandallos.jsp">Escandallos</a></li>
    			<li><a href="escandallos.jsp">Crear nuevo escandallos</a></li>
-    		<li><a href="porHacer.html">Login</a></li>
+    		<li><a href="logout.jsp">Desconectarse</a></li>
         </ul>
     </div>
