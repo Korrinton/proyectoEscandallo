@@ -10,9 +10,12 @@ public class Escandallo {
     private List<Ingrediente> ingredientes; 
     private int porciones;
     private double costePorPorciones;
+    private String usuario;
 
     
-    public Escandallo(String producto, double costoTotal,int porciones, List<Ingrediente> ingredientes) {
+    
+
+	public Escandallo(String producto, double costoTotal,int porciones, List<Ingrediente> ingredientes) {
 
         this.NombreEscandallo = producto;
         this.costoTotal = costoTotal;
@@ -53,6 +56,16 @@ public class Escandallo {
 
 	public void setCostePorPorciones(double costePorPorciones) {
 		this.costePorPorciones = costePorPorciones;
+	}
+	
+	
+	
+	public String getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(String usuario) {
+		this.usuario = usuario;
 	}
 
 	//método para calcular el coste

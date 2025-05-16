@@ -1,4 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+    <%
+    String usuario = (String) session.getAttribute("usuario");
+%>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -13,7 +16,15 @@
     <jsp:include page="cabecera.jsp" flush="true" />
 
 	 <div class="contenedor">
-        <h2>Bienvenido</h2>
+        <h2>Bienvenido <% 
+        if(usuario!=null){
+			out.println("<span>" + usuario + "</span>");
+ 
+        	
+        	}%>
+        	
+        </h2>
+        
         <p>Esta aplicación te permite gestionar los ingredientes, recetas y costos de tus productos finales.</p>
         <p>Utiliza los enlaces de navegación para acceder a las diferentes secciones.</p>
     </div>

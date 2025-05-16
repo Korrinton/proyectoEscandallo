@@ -1,0 +1,8 @@
+Harina;kg;0.75
+Azúcar;kg;1.10
+Leche;L;0.85
+Harina;kg;0.90
+lentejas;kg;1.00
+platanos;kg;2.50
+naranjas;kg;2.50
+mandarinas;kg;1.50
