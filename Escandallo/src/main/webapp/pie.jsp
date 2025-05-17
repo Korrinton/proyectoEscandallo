@@ -2,5 +2,5 @@
     pageEncoding="UTF-8"%>
       <link rel="stylesheet" href="css/pie.css">
     <footer>
-        <p>&copy; 2025 Miguel, Ramón y Zelfa</p>
+        <p>&copy; 2025 Miguel, Ramón, Zelfa y Estefani</p>
     </footer>

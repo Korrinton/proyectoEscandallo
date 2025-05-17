@@ -14,66 +14,54 @@
   <jsp:include page="cabecera.jsp" flush="true" />
 <body>
 
-<form action="ingredientes.jsp" class="formulario" method="post">
-    <label for="nombre">Nombre:</label>
-    <input type="text" id="nombre" name="nombre" required>
-    
-    <label for="unidad_medida">Seleccionar unidad</label>
-    <select id="unidad_medida" name="unidad_medida" required>
-        <option value="kg">Kilogramos (kg)</option>
-        <option value="L">Litros (L)</option>
-    </select>
-    
-    <label for="costo_por_unidad">Costo por Unidad:</label>
-    <input type="number" id="costo_por_unidad" name="costo_por_unidad" step="0.01" required>
-    
-    <button type="submit">Guardar Ingrediente</button>
-</form>
-
-<%
-    // Obtener los parámetros del formulario (suponiendo que los tienes)
-    String nombre = request.getParameter("nombre");
-    String unidadMedida = request.getParameter("unidad_medida");
-    String costoStr = request.getParameter("costo_por_unidad");
-
-    if (nombre != null && unidadMedida != null && costoStr != null && !nombre.isEmpty() && !unidadMedida.isEmpty() && !costoStr.isEmpty()) {
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-
-        try {
-        	Class.forName("org.sqlite.JDBC");
-              
-        	//indicación para ver donde está buscando la base de datos
-        	String dbPath = application.getRealPath("/bases_de_datos/escandallo.db");
-        	//out.println("<p>Ruta de la base de datos: " + dbPath + "</p>");
-        	String dbURL = "jdbc:sqlite:" + dbPath;
-        	//out.println("<p>URL de conexión: " + dbURL + "</p>");
-        	conn = DriverManager.getConnection(dbURL);
-            
-            String sql = "INSERT INTO ingredientes (nombre, unidad_medida, costo_por_unidad) VALUES (?, ?, ?)";
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, nombre);
-            pstmt.setString(2, unidadMedida);
-            pstmt.setDouble(3, Double.parseDouble(costoStr));
-            pstmt.executeUpdate();
-
-            out.println("<p>Ingrediente añadido con éxito: Nombre: " + nombre + ", Unidad: " + unidadMedida + ", Costo: " + costoStr + "</p>");
-
-        } catch (SQLException e) {
-            out.println("<p>Error de SQL: " + e.getMessage() + "</p>");
-        } catch (NumberFormatException e) {
-            out.println("<p>Error de formato numérico al convertir el costo.</p>");
-        } catch (Exception e) {
-            out.println("<p>Error general: " + e.getMessage() + "</p>");
-        } finally {
-            if (pstmt != null) try { pstmt.close(); } catch (SQLException ignore) {}
-            if (conn != null) try { conn.close(); } catch (SQLException ignore) {}
-        }
-    } else if (request.getMethod().equalsIgnoreCase("POST")) {
-        out.println("<p>Por favor, completa todos los campos del formulario.</p>");
-    }
-%>
-
-</body>
+<h3>Listado de Ingredientes</h3> 
+<a href="registrarIngrediente.jsp">Crear nuevo ingrediente</a> 
+<a href="creacionIngredientesFichero.jsp">Crear ingredientes por fichero</a> 
+ 
+<% 
+Connection conn = null; 
+PreparedStatement pstmt = null; 
+ResultSet rs = null; 
+ 
+try { 
+    Class.forName("org.sqlite.JDBC"); 
+    conn = DriverManager.getConnection("jdbc:sqlite:" + application.getRealPath("/bases_de_datos/escandallo.db")); 
+ 
+    String sql = "SELECT nombre, unidad_medida, costo_por_unidad FROM ingredientes"; 
+    pstmt = conn.prepareStatement(sql); 
+    rs = pstmt.executeQuery(); 
+ 
+    boolean hayDatos = false; 
+ 
+    out.println("<div style='max-height: 400px; overflow: auto; border: 1px solid #ccc;'>"); 
+    out.println("<table border='1' style='width: 100%; border-collapse: collapse;'>"); 
+    out.println("<tr><th>Nombre</th><th>Unidad de Medida</th><th>Costo por Unidad</th></tr>"); 
+ 
+    while (rs.next()) { 
+        hayDatos = true; 
+        out.println("<tr>"); 
+        out.println("<td>" + rs.getString("nombre") + "</td>"); 
+        out.println("<td>" + rs.getString("unidad_medida") + "</td>"); 
+        out.println("<td>" + rs.getDouble("costo_por_unidad") + "</td>"); 
+        out.println("</tr>"); 
+    } 
+ 
+    out.println("</table>"); 
+    out.println("</div>"); 
+ 
+    if (!hayDatos) { 
+        out.println("<p>No hay ingredientes disponibles en la base de datos.</p>"); 
+    } 
+ 
+} catch (Exception e) { 
+    out.println("<p>Error al listar ingredientes: " + e.getMessage() + "</p>"); 
+} finally { 
+    if (rs != null) try { rs.close(); } catch (SQLException ignore) {} 
+    if (pstmt != null) try { pstmt.close(); } catch (SQLException ignore) {} 
+    if (conn != null) try { conn.close(); } catch (SQLException ignore) {} 
+} 
+%> 
+ 
+</body> 
 <jsp:include page="pie.jsp" flush="true" />
 </html>
