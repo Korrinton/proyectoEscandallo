@@ -41,9 +41,9 @@
 		<div class="options">
 			<a href="index.jsp">Volver a login</a>
 			<br>
-		</div>
 		
-	</div>
+		
+	
 
 	<%!public String cifrarSHA256(String contrasena) {
 		try {
@@ -100,8 +100,8 @@
 		pstmt.setString(4, apellidos);
 		pstmt.executeUpdate();
 
-		out.println("<p>usuario añadido con éxito: Usuario: " + usuario + "</p>");
-		out.println("<p><a href='home.jsp'>Volver a home</a></p>");
+		out.println("<p>usuario añadido con éxito: " + usuario + "</p>");
+		
 		
 			}
 
@@ -121,7 +121,8 @@
 		}
 	}
 	%>
-
+	</div>
+</div>
 <jsp:include page="pie.jsp" flush="false" />
 
 </body>

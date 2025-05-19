@@ -67,7 +67,6 @@
 				            out.println("<p>Ingrediente añadido con éxito: " + nombreIngrediente + "</p>");
 
 					}
-			
            
         } catch (SQLException e) {
             out.println("<p>Error de SQL: " + e.getMessage() + "</p>");

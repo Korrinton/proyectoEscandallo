@@ -1,6 +1,5 @@
 function actualizarPrecioFila(selectIngrediente) {
     var precioSpan = selectIngrediente.parentNode.parentNode.querySelector('.precio-ingrediente');
-    var precioInputHidden = selectIngrediente.parentNode.parentNode.querySelector('.precio-escondido');
     var unidadSelect = selectIngrediente.parentNode.nextElementSibling.querySelector('select[name="ingredienteUnidad"]');
     var selectedOption = selectIngrediente.options[selectIngrediente.selectedIndex];
     var precio = selectedOption.getAttribute('data-precio');
@@ -9,18 +8,13 @@ function actualizarPrecioFila(selectIngrediente) {
     if (precioSpan) {
         precioSpan.textContent = parseFloat(precio).toFixed(2);
     }
-    if (precioInputHidden) {
-        precioInputHidden.value = precio;
-    }
     if (unidadSelect && unidad) {
-        for (var i = 0; i < unidadSelect.options.length; i++) {
-            if (unidadSelect.options[i].value === unidad) {
-                unidadSelect.selectedIndex = i;
-                break;
-            }
-        }
-    } else if (unidadSelect) {
-        unidadSelect.selectedIndex = 0; // O podrías establecer un valor por defecto si no se encuentra la unidad
+        unidadSelect.innerHTML = ''; // Clear existing options
+        var newOption = document.createElement('option');
+        newOption.value = unidad;
+        newOption.textContent = unidad;
+        unidadSelect.appendChild(newOption);
+        unidadSelect.value = unidad; // Set the selected unit
     }
 }
 
@@ -84,9 +78,7 @@ function eliminarFila(boton) {
         if (precioSpan) {
             precioSpan.textContent = '0.00';
         }
-        if (precioInputHidden) {
-            precioInputHidden.value = '0.00';
-        }
+
         if (unidadSelect) {
             unidadSelect.selectedIndex = 0;
         }

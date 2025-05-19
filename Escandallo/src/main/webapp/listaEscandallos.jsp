@@ -28,7 +28,8 @@
                         <th>Nombre del Producto</th>
                         <th>Número de Porciones</th>
                         <th>Imagen</th>
-                        <th>Acciones</th> </tr>
+                        <th>Ingredientes</th>
+                        <th>Costes</th> </tr>
                 </thead>
                 <tbody>
                     <%
@@ -48,7 +49,6 @@
                                 <td>
                                     <%
                                     if (escandallo.getIngredientes() != null && !escandallo.getIngredientes().isEmpty()) {
-                                        out.println("<h5>Ingredientes:</h5>");
                                         out.println("<ul>"); // Empezamos una lista no ordenada para los ingredientes
                                         for(Ingrediente ingrediente : escandallo.getIngredientes()){
                                             out.println("<li>" + ingrediente.getNombre() + " - " + ingrediente.getCantidad() + " " + ingrediente.getUnidad() + "</li>");
@@ -57,6 +57,13 @@
                                     } else {
                                         out.println("Sin ingredientes");
                                     }
+                                    %>
+                                </td>                  
+                                 <td>
+                                    <%
+                                    out.println("<ul>"+"Coste total: "+escandallo.getCosteTotal()+" euros"+"</ul>");
+                                    out.println("<ul>"+"Coste por porciones: "+escandallo.getCostePorPorciones()+" euros"+"</ul>");
+                                    
                                     %>
                                 </td>
                             </tr>

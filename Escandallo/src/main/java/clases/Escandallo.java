@@ -15,6 +15,7 @@ public class Escandallo {
     private ArrayList<Ingrediente> ingredientes;
     private Double costeTotal;
     private ServletContext servletContext;
+    private Double costePorPorciones;
     
     /**
      * Constructor por defecto
@@ -73,8 +74,15 @@ public class Escandallo {
         setCosteTotal();
     }
     
+    
+    public Double getCostePorPorciones() {
+    	costePorPorciones=this.costeTotal/this.numeroPorciones;
+    	return costePorPorciones;
+	}
 
-    public void addIngrediente(Ingrediente ingrediente) {
+	
+
+	public void addIngrediente(Ingrediente ingrediente) {
         this.ingredientes.add(ingrediente);
         setCosteTotal();
     }
@@ -89,7 +97,8 @@ public class Escandallo {
     }
 
     public Double getCosteTotal() {
-        return costeTotal;
+        
+    	return costeTotal;
     }
 
     public void removeIngrediente(int index) {

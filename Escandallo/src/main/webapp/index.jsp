@@ -38,7 +38,7 @@
    	 <div class="options">
    	 	<a href="registroUsuario.jsp">Crear Nuevo Usuario</a>
    	 </div>
-    </div>
+    
     <%!public String cifrarSHA256(String contrasena) {
 		try {
 			MessageDigest md = MessageDigest.getInstance("SHA-256");
@@ -71,9 +71,9 @@
         	//indicación para ver donde está buscando la base de datos
         	String dbPath = application.getRealPath("/bases_de_datos/escandallo.db");
         	
-        	out.println("<p>Ruta de la base de datos: " + dbPath + "</p>");
+        	//out.println("<p>Ruta de la base de datos: " + dbPath + "</p>");
         	String dbURL = "jdbc:sqlite:" + dbPath;
-        	out.println("<p>URL de conexión: " + dbURL + "</p>");
+        	//out.println("<p>URL de conexión: " + dbURL + "</p>");
         	
         	conn = DriverManager.getConnection(dbURL);
         	
@@ -102,6 +102,7 @@
         }
     }
 %>
+</div>
 <jsp:include page="pie.jsp" flush="true" />
 </body>
 </html>
