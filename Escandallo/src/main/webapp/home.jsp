@@ -15,7 +15,7 @@
         <video autoplay loop muted playsinline style="position: fixed; top: 0; left: 0; min-width: 100%; min-height: 100%; z-index: -1;">
   			<source src="img/loginCocina.mp4" type="video/mp4">
   			<source src="img/loginCocina.mp4" type="video/webm">
-  			
+  			 Tu navegador no soporta la reproducción de video.
 			</video>
 	<div class="caja">
 	<%
