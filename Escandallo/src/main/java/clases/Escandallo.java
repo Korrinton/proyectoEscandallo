@@ -77,11 +77,19 @@ public class Escandallo {
     
     public Double getCostePorPorciones() {
     	costePorPorciones=this.costeTotal/this.numeroPorciones;
+
     	return costePorPorciones;
 	}
-
-	
-
+    //formato para verlo en forma de euros
+    public String getCostePorPorcionesFormateado() {
+    	costePorPorciones=this.costeTotal/this.numeroPorciones;
+    	String formateado = String.format("%.2f", costePorPorciones);
+    	return formateado;
+	}
+    public String getCosteTotalFormateado() {
+    	String formateado = String.format("%.2f", this.costeTotal);
+    	return formateado;
+	}
 	public void addIngrediente(Ingrediente ingrediente) {
         this.ingredientes.add(ingrediente);
         setCosteTotal();
@@ -257,7 +265,7 @@ public class Escandallo {
 
         try {
             Class.forName("org.sqlite.JDBC");
-            String dbPath = (servletContext != null) ? servletContext.getRealPath("/bases_de_datos/escandallo.db") : "ruta/por/defecto/escandallo.db";
+            String dbPath = (servletContext != null) ? servletContext.getRealPath("/bases_de_datos/escandallo.db") : "bases_de_datos/escandallo.db";
             String dbURL = "jdbc:sqlite:" + dbPath;
             conn = DriverManager.getConnection(dbURL);
 

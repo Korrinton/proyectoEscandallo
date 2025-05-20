@@ -61,8 +61,8 @@
                                 </td>                  
                                  <td>
                                     <%
-                                    out.println("<ul>"+"Coste total: "+escandallo.getCosteTotal()+" euros"+"</ul>");
-                                    out.println("<ul>"+"Coste por porciones: "+escandallo.getCostePorPorciones()+" euros"+"</ul>");
+                                    out.println("<ul>"+"Coste total: "+escandallo.getCosteTotalFormateado()+" euros"+"</ul>");
+                                    out.println("<ul>"+"Coste por porciones: "+escandallo.getCostePorPorcionesFormateado()+" euros"+"</ul>");
                                     
                                     %>
                                 </td>

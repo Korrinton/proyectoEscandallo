@@ -72,7 +72,7 @@ if ("POST".equalsIgnoreCase(request.getMethod())) {
                 }
             }
         }
-	
+
         // Guardar en la base de datos
         boolean guardado = nuevoEscandallo.guardar();
 
@@ -131,20 +131,24 @@ if ("POST".equalsIgnoreCase(request.getMethod())) {
                                 <select name="ingredienteNombre" required onchange="actualizarPrecioFila(this)">
                                     <option value="" data-precio="0" data-unidad="">-- Seleccione un ingrediente --</option>
                                     <%
-                                    Class.forName("org.sqlite.JDBC");
-                                    
-                                    String dbPath = application.getRealPath("/bases_de_datos/escandallo.db");
-                                    String dbURL = "jdbc:sqlite:" + dbPath;
-                                    Connection conn = DriverManager.getConnection(dbURL);                                  
-                                    Statement stmt= conn.createStatement();
-                               
-                                    try { 
- 
- 										String sql = "SELECT nombre, unidad_medida, costo_por_unidad FROM ingredientes";
-										ResultSet rs = stmt.executeQuery(sql);
+                                    Connection conn = null;
+                                    Statement stmt = null;
+                                    ResultSet rs = null;
+
+                                    try {
+                                        Class.forName("org.sqlite.JDBC");
+
+                                        String dbPath = application.getRealPath("/bases_de_datos/escandallo.db");
+                                        String dbURL = "jdbc:sqlite:" + dbPath;
+                                        conn = DriverManager.getConnection(dbURL);
+
+                                        stmt = conn.createStatement();
+
+                                        String sql = "SELECT nombre, unidad_medida, costo_por_unidad FROM ingredientes";
+                                        rs = stmt.executeQuery(sql);
 
                                         while (rs.next()) {
-                                  			String nombreIngrediente = rs.getString("nombre");
+                                            String nombreIngrediente = rs.getString("nombre");
                                             String unidadMedidaIngrediente = rs.getString("unidad_medida");
                                             double precioIngrediente = rs.getDouble("costo_por_unidad");
                                             out.println("<option value='" + nombreIngrediente + "' data-precio='" + precioIngrediente + "' data-unidad='" + unidadMedidaIngrediente + "'>" + nombreIngrediente + "</option>");
