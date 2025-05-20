@@ -41,9 +41,9 @@
 		<div class="options">
 			<a href="index.jsp">Volver a login</a>
 			<br>
-		</div>
 		
-	</div>
+		
+	
 
 	<%!public String cifrarSHA256(String contrasena) {
 		try {
@@ -107,6 +107,7 @@
 		//muestro un mensaje de usuario añadido con éxito 
 		out.println("<p class='mensaje exito'>usuario añadido con éxito: Usuario: " + usuario + "</p>");
 		
+		
 			}
 		//Si ocurre algún error lo muestro
 		} catch (Exception e) {
@@ -126,7 +127,8 @@
 		}
 	}
 	%>
-
+	</div>
+</div>
 <jsp:include page="pie.jsp" flush="false" />
 
 </body>

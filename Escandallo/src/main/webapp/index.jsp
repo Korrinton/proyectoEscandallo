@@ -110,6 +110,7 @@
         }
     }
 %>
+</div>
 <jsp:include page="pie.jsp" flush="true" />
 </body>
 </html>
