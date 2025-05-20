@@ -55,7 +55,13 @@ try {
 
     out.println("</table>"); 
     out.println("</div>"); 
-
+    
+    out.println("<form action='descargarIngredientes.jsp' method='post'>"); 
+   	
+    out.println("<input type='submit' value='Descargar Ingredientes'>");
+    out.println("</form>");
+    out.println("</td>");
+    out.println("</tr>"); 
     if (!hayDatos) { 
         out.println("<p>No hay ingredientes disponibles en la base de datos.</p>"); 
     } 
@@ -68,6 +74,7 @@ try {
     if (conn != null) try { conn.close(); } catch (SQLException ignore) {} 
 } 
 %> 
+
 
 </body> 
 <jsp:include page="pie.jsp" flush="true" />
