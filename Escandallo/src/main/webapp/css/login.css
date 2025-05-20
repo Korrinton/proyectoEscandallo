@@ -8,6 +8,7 @@ body {
             align-items: center;
             min-height: 100vh;
             margin: 0;
+            position: relative;
         }
 
         .login-container {
@@ -99,3 +100,24 @@ body {
         .options a:hover {
             text-decoration: underline;
         }
+        
+        .mensaje{
+	        position:absolute;
+	        top: 0;
+		    left: 0;
+		    width: 100%;
+		    text-align: center;
+		    margin: 0;
+		    padding: 1rem;
+		    color: white;
+		    font-weight: bold;
+        }
+        
+        .mensaje.error{
+       		background: red;
+        }
+        
+        .mensaje.exito{
+   			background: green;
+        }
+        

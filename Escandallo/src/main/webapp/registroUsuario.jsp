@@ -63,35 +63,39 @@
 	}%>
 
 	<%
+	//Aqui se crean 3 variables, para guardar la conexión, la consulta y para guardar resultados de la consulta
 	Connection conn = null;
 	PreparedStatement pstmt = null;
 	ResultSet rs = null;
 
-	// Obtener los parámetros del formulario (suponiendo que los tienes)
+	// Recoger datos del formulario escritos por el usuario
 	String usuario = request.getParameter("usuario");
 	String contrasena = request.getParameter("contrasena");
 	String nombre = request.getParameter("nombre");
 	String apellidos = request.getParameter("apellidos");
 
+	//Compruebo que no hay campos nulos
 	if (usuario != null && contrasena != null && nombre != null && apellidos != null) {
 		try {
-
+			//Intento la conexion a la bbdd
 			Class.forName("org.sqlite.JDBC");// DRIVER CORRECTO PARA SQLITE                            
 			conn = DriverManager
 			.getConnection("jdbc:sqlite:" + application.getRealPath("/bases_de_datos/escandallo.db"));
 
-			// Comprobar si el usuario ya existe
+			// Comprobar si el usuario ya existe, ejecuto y guardo resultado
 			String verificarUsuario = "SELECT COUNT(*) FROM usuarios WHERE usuario = ?";
 			pstmt = conn.prepareStatement(verificarUsuario);
 			pstmt.setString(1, usuario);
 			rs = pstmt.executeQuery();
 
+			//Si el resultado es > 0 = usuario existe y lo notifico
 			if (rs.next() && rs.getInt(1) > 0) {
-		out.println("<p>El usuario '" + usuario + "' ya existe. Por favor, elige otro.</p>");
+		out.println("<p class='mensaje error'>El usuario '" + usuario + "' ya existe. Por favor, elige otro.</p>");
+			//Si no existe, cifro y guardo al usuario nuevo
 			} else {
 				
 				String contrasenaCifrada = cifrarSHA256(contrasena);
-		
+		//Preparo la consulta para guardar al nuevo usuario
 		String sql = "INSERT INTO usuarios (usuario, contrasena, nombre, apellidos) VALUES (?, ?, ?, ?)";
 		pstmt = conn.prepareStatement(sql);
 		pstmt.setString(1, usuario);
@@ -99,14 +103,15 @@
 		pstmt.setString(3, nombre);
 		pstmt.setString(4, apellidos);
 		pstmt.executeUpdate();
-
-		out.println("<p>usuario añadido con éxito: Usuario: " + usuario + "</p>");
-		out.println("<p><a href='home.jsp'>Volver a home</a></p>");
+	
+		//muestro un mensaje de usuario añadido con éxito 
+		out.println("<p class='mensaje exito'>usuario añadido con éxito: Usuario: " + usuario + "</p>");
 		
 			}
-
+		//Si ocurre algún error lo muestro
 		} catch (Exception e) {
 			out.println("<p>Error: " + e.getMessage() + "</p>");
+		//Cierro conexion y consulta
 		} finally {
 			if (pstmt != null)
 		try {

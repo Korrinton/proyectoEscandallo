@@ -39,7 +39,9 @@
    	 	<a href="registroUsuario.jsp">Crear Nuevo Usuario</a>
    	 </div>
     </div>
-    <%!public String cifrarSHA256(String contrasena) {
+    
+    <%!
+    public String cifrarSHA256(String contrasena) {
 		try {
 			MessageDigest md = MessageDigest.getInstance("SHA-256");
 			byte[] hash = md.digest(contrasena.getBytes("UTF-8"));
@@ -54,12 +56,18 @@
 		} catch (Exception e) {
 			return null;
 		}
-	}%>
+	}
+	%>
+	
+	
     <%
+    //Recoge los datos del formulario
     String usuario = request.getParameter("usuario");
     String contrasena = request.getParameter("contrasena");
-
-    if (usuario != null && contrasena != null) {
+	
+    
+    if (usuario != null && contrasena != null) { ////Verifica que no estén vacíos
+    	//Prepara conexión, consulta y resultados.
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -67,35 +75,35 @@
        
 
         try {
+        	//Carga el driver JDBC para SQLite
         	Class.forName("org.sqlite.JDBC");
-        	//indicación para ver donde está buscando la base de datos
+        	//Obtiene la ruta de la ddbb está buscando la base de datos
         	String dbPath = application.getRealPath("/bases_de_datos/escandallo.db");
+ 
+        	String dbURL = "jdbc:sqlite:" + dbPath; //forma la URL para conectarse
         	
-        	out.println("<p>Ruta de la base de datos: " + dbPath + "</p>");
-        	String dbURL = "jdbc:sqlite:" + dbPath;
-        	out.println("<p>URL de conexión: " + dbURL + "</p>");
+        	conn = DriverManager.getConnection(dbURL); //Establece la conexión a la bbdd
         	
-        	conn = DriverManager.getConnection(dbURL);
-        	
-			String contrasenaCifrada = cifrarSHA256(contrasena);
+			String contrasenaCifrada = cifrarSHA256(contrasena); //Cifra la contraseña
 
+			//Prepara una consulta segura 
             String sql = "SELECT * FROM usuarios WHERE usuario = ? AND contrasena = ?";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, usuario);
             pstmt.setString(2, contrasenaCifrada);
-            rs = pstmt.executeQuery();
+            rs = pstmt.executeQuery(); //ejecuta la consulta
 			
-            if (rs.next()) {
-            	
+            if (rs.next()) { //Si hay resultado porque fué correcto
+				//Guarda usuario y redirige a home           	
             	 session.setAttribute("usuario", usuario);
             	 response.sendRedirect("home.jsp");
                 //out.println("<p style='color:green;'>Inicio de sesión exitoso. Bienvenido, " + rs.getString("nombre") + ".</p>");
-            } else {
-                out.println("<p style='color:red;'>Usuario o contraseña incorrectos.</p>");
+            } else { //Si falla, muestra error
+                out.println("<p class='mensaje error'>Usuario o contraseña incorrectos.</p>");
             }
-        } catch (Exception e) {
-            out.println("<p style='color:red;'>Error: " + e.getMessage() + "</p>");
-        } finally {
+        } catch (Exception e) { //Captura y muestra errores
+            out.println("<p class='mensaje error''>Error: " + e.getMessage() + "</p>");
+        } finally { //Cierra conexiones para liberar recursos
             if (rs != null) try { rs.close(); } catch (SQLException ignore) {}
             if (pstmt != null) try { pstmt.close(); } catch (SQLException ignore) {}
             if (conn != null) try { conn.close(); } catch (SQLException ignore) {}
