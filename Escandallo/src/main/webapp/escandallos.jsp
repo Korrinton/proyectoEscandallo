@@ -27,6 +27,7 @@ if ("POST".equalsIgnoreCase(request.getMethod())) {
 
         // Procesar imagen si se ha subido
         try {
+        	//se busca en el server la imagen 
             jakarta.servlet.http.Part imagenPart = request.getPart("imagen");
             if (imagenPart != null && imagenPart.getSize() > 0) {
                 String fileName = Paths.get(imagenPart.getSubmittedFileName()).getFileName().toString();
@@ -50,6 +51,7 @@ if ("POST".equalsIgnoreCase(request.getMethod())) {
         String[] ingredientesNombres = request.getParameterValues("ingredienteNombre");
         String[] ingredientesCantidades = request.getParameterValues("ingredienteCantidad");
         String[] ingredientesPrecio = request.getParameterValues("ingredientePrecio");
+        String[] ingredientesUnidades = request.getParameterValues("ingredienteUnidad");
 
         if (ingredientesNombres != null) {
             for (int i = 0; i < ingredientesNombres.length; i++) {
@@ -57,16 +59,12 @@ if ("POST".equalsIgnoreCase(request.getMethod())) {
                     String nombre = ingredientesNombres[i];
                     double cantidad = Double.parseDouble(ingredientesCantidades[i]);
                     double precio = Double.parseDouble(ingredientesPrecio[i]);
-
-                    String unidad = "";
-                    String[] parts = request.getParameterValues("ingredienteNombre")[i].split("'data-unidad='");
-                    if (parts.length > 1) {
-                        String[] unidadParts = parts[1].split("'");
-                        if (unidadParts.length > 0) {
-                            unidad = unidadParts[0];
-                        }
+                    
+                    String unidad = ""; // Inicializa la unidad                    
+                    if (ingredientesUnidades != null && i < ingredientesUnidades.length) {                
+                    	unidad = ingredientesUnidades[i];
                     }
-
+                   
                     Ingrediente ingrediente = new Ingrediente(nombre, cantidad, unidad, precio);
                     nuevoEscandallo.addIngrediente(ingrediente);
                 }
@@ -166,10 +164,15 @@ if ("POST".equalsIgnoreCase(request.getMethod())) {
                             <td>
                                 <input type="number" name="ingredienteCantidad" step="0.01" min="0" required>
                                 <span class="unidad-ingrediente"></span>
+                                <input type="hidden" name="ingredienteUnidad" class="unidad-escondida" value="">
+                                
                             </td>
+                            
+                            
                             <td>
                                 <span class="precio-ingrediente">0.00</span>
                                 <input type="hidden" name="ingredientePrecio" class="precio-escondido" value="0.00">
+                                
                             </td>
                             <td>
                                 <button type="button" class="btn-eliminar" onclick="eliminarFila(this)">Eliminar</button>
